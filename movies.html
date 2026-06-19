@@ -1,0 +1,494 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Thursday Movies — Screening Dashboard</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Oswald:wght@400;500;600;700&family=Source+Sans+3:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#202124; /* Google Dark Mode Background */
+    --surface:#303134;
+    --surface-elevated:#3c4043;
+    --line:#3c4043;
+    --text:#e8eaed;
+    --text-muted:#bdc1c6;
+    --text-faint:#9aa0a6;
+    --accent-blue:#8ab4f8;
+    --accent-red:#f28b82;
+    --yt-red:#ff0000;
+    
+    --display:'Bebas Neue', 'Oswald', sans-serif;
+    --heading:'Oswald', sans-serif;
+    --body:'Source Sans 3', sans-serif;
+    --radius:12px;
+  }
+
+  *{margin:0;padding:0;box-sizing:border-box;}
+  body{
+    background:var(--bg);
+    color:var(--text);
+    font-family:var(--body);
+    line-height:1.5;
+    padding:40px 20px;
+    -webkit-font-smoothing:antialiased;
+  }
+
+  .container{
+    max-width:900px;
+    margin:0 auto;
+  }
+
+  header{
+    margin-bottom:32px;
+    border-bottom:1px solid var(--line);
+    padding-bottom:16px;
+  }
+  header h1{
+    font-family:var(--display);
+    font-size:2.8rem;
+    letter-spacing:1px;
+    color:var(--text);
+  }
+  header h1 span{color:var(--accent-red);}
+  header p{
+    color:var(--text-muted);
+    font-size:1rem;
+    font-family:var(--heading);
+    text-transform:uppercase;
+    letter-spacing:1px;
+  }
+
+  /* ---------- Google Engine Card Design Matrix ---------- */
+  .movie-engine-card{
+    background:var(--bg);
+    border:1px solid var(--line);
+    border-radius:var(--radius);
+    padding:24px;
+    margin-bottom:32px;
+    box-shadow:0 1px 3px rgba(0,0,0,0.2);
+  }
+
+  /* Header Segment */
+  .g-header{
+    display:flex;
+    justify-content:space-between;
+    align-items:flex-start;
+    margin-bottom:20px;
+  }
+  .g-title-area h2{
+    font-family:var(--heading);
+    font-weight:500;
+    font-size:2rem;
+    color:var(--text);
+    line-height:1.2;
+  }
+  .g-meta{
+    font-size:0.85rem;
+    color:var(--text-faint);
+    margin-top:4px;
+  }
+
+  /* Navigation Tabs Selector */
+  .g-tabs{
+    display:flex;
+    gap:10px;
+    margin-bottom:20px;
+    border-bottom:1px solid var(--line);
+    padding-bottom:12px;
+  }
+  .g-tab-btn{
+    background:var(--surface);
+    border:1px solid transparent;
+    color:var(--text);
+    font-family:var(--body);
+    font-size:0.9rem;
+    padding:8px 20px;
+    cursor:pointer;
+    border-radius:24px;
+    transition:background 0.2s, border-color 0.2s;
+  }
+  .g-tab-btn:hover{
+    background:var(--surface-elevated);
+  }
+  .g-tab-btn.active{
+    background:#3d3335;
+    border-color:var(--accent-red);
+    color:var(--accent-red);
+  }
+
+  /* Core UI Dashboard Grid Splitter */
+  .g-grid{
+    display:grid;
+    grid-template-columns:1.5fr 1fr;
+    gap:24px;
+  }
+  @media(max-width:768px){
+    .g-grid{grid-template-columns:1fr;}
+  }
+
+  /* Left Side: Dynamic Panels */
+  .g-panel-display{
+    background:rgba(255,255,255,0.02);
+    border-radius:8px;
+    padding:16px;
+    border:1px solid rgba(255,255,255,0.05);
+    min-height:180px;
+  }
+  .g-view{display:none;}
+  .g-view.active{display:block;}
+
+  /* Panels Styling */
+  .overview-text{
+    font-size:1rem;
+    line-height:1.6;
+    color:var(--text-muted);
+  }
+  
+  .cast-list{
+    display:grid;
+    grid-template-columns:repeat(auto-fill, minmax(130px, 1fr));
+    gap:14px;
+  }
+  .cast-card{
+    background:var(--surface);
+    border-radius:8px;
+    padding:10px;
+    text-align:center;
+    border:1px solid var(--line);
+  }
+  .cast-photo-frame{
+    width:64px;
+    height:64px;
+    border-radius:50%;
+    background:var(--surface-elevated);
+    margin:0 auto 8px;
+    overflow:hidden;
+    border:2px solid var(--line);
+  }
+  .cast-photo-frame img{
+    width:100%;
+    height:100%;
+    object-fit:cover;
+  }
+  .cast-char{
+    font-size:0.85rem;
+    font-weight:600;
+    color:var(--text);
+    display:block;
+  }
+  .cast-actor{
+    font-size:0.75rem;
+    color:var(--text-faint);
+    display:block;
+  }
+
+  .watch-panel{
+    text-align:center;
+    padding:20px 0;
+  }
+  .yt-link-btn{
+    display:inline-flex;
+    align-items:center;
+    gap:10px;
+    background:var(--surface);
+    border:1px solid var(--line);
+    color:var(--text);
+    padding:14px 28px;
+    border-radius:30px;
+    font-family:var(--heading);
+    font-size:1rem;
+    text-transform:uppercase;
+    letter-spacing:1px;
+    transition:background 0.2s, border-color 0.2s;
+  }
+  .yt-link-btn:hover{
+    background:#ff000022;
+    border-color:var(--yt-red);
+  }
+  .yt-link-btn svg{
+    width:24px;
+    height:24px;
+    fill:var(--yt-red);
+  }
+
+  /* Right Side: Media / Info Box Panels */
+  .g-meta-box{
+    display:flex;
+    flex-direction:column;
+    gap:16px;
+  }
+  .poster-frame{
+    position:relative;
+    aspect-ratio:16/9;
+    border-radius:8px;
+    overflow:hidden;
+    background:var(--surface);
+    border:1px solid var(--line);
+  }
+  .poster-frame img{
+    width:100%;
+    height:100%;
+    object-fit:cover;
+  }
+  .upcoming-ribbon{
+    position:absolute;
+    top:12px;
+    left:12px;
+    background:var(--accent-red);
+    color:#000;
+    font-family:var(--heading);
+    font-size:0.75rem;
+    font-weight:700;
+    text-transform:uppercase;
+    padding:4px 8px;
+    border-radius:4px;
+    letter-spacing:0.5px;
+  }
+
+  .rating-box{
+    background:var(--surface);
+    border:1px solid var(--line);
+    border-radius:8px;
+    padding:16px;
+  }
+  .rating-box h4{
+    font-family:var(--heading);
+    font-size:0.8rem;
+    color:var(--text-faint);
+    text-transform:uppercase;
+    letter-spacing:1px;
+    margin-bottom:10px;
+  }
+  .rating-row{
+    display:flex;
+    justify-content:space-between;
+    font-size:0.9rem;
+    padding:6px 0;
+    border-bottom:1px solid rgba(255,255,255,0.05);
+  }
+  .rating-row:last-child{border:none;}
+  .rating-source{color:var(--text-muted);}
+  .rating-score{font-weight:600;}
+</style>
+</head>
+<body>
+
+<div class="container">
+  
+  <header>
+    <p>Thursday Industries Inc.</p>
+    <h1>Thursday <span>Movies</span></h1>
+  </header>
+
+  <main id="engine-root">
+    <!-- Search engine modules injected here via JavaScript -->
+  </main>
+
+</div>
+
+<script>
+  // Complete Short Film Matrix Data Setup
+  const movieDatabase = [
+    {
+      id: "movie-1",
+      title: "Helplessness of Humanity",
+      meta: "2019 • Thriller/Drama • Short Film",
+      poster: "helplessness.jpg", // Set system image filename here
+      isUpcoming: false,
+      youtube: "https://www.youtube.com", // Set link to YouTube target
+      overview: "An deep cinematic exploration into the structural vulnerabilities, isolation, and psychological limits of individual elements caught inside modern systemic grids.",
+      ratings: [
+        { source: "IMDb", score: "7.4/10" },
+        { source: "Rotten Tomatoes", score: "89%" },
+        { source: "Letterboxd", score: "3.8/5" }
+      ],
+      cast: [
+        { char: "Railway Officer", actor: "Joshwa Jose", pic: "joshwa.jpg" }, // Set cast picture path here
+        { char: "Homeless Person", actor: "Rahul", pic: "rahul.jpg" }
+      ]
+    },
+    {
+      id: "movie-2",
+      title: "Brainbox",
+      meta: "2022 • Sci-Fi/Mystery • Short Film",
+      poster: "brainbox.jpg", 
+      isUpcoming: false,
+      youtube: "https://www.youtube.com",
+      overview: "Two friends gets trapped in a mind draining vaccum state in a specific geography, their friend comes to rescue them because he is a research student of geological mapping.",
+      ratings: [
+        { source: "IMDb", score: "8.1/10" },
+        { source: "Rotten Tomatoes", score: "94%" },
+        { source: "Letterboxd", score: "4.2/5" }
+      ],
+      cast: [
+        { char: "Ajith", actor: "Joshwa Jose", pic: "joshwa.jpg" },
+        { char: "Jerry", actor: "Rahul", pic: "rahul.jpg" },
+        { char: "Albert", actor: "Harikrishnan PS", pic: "harikrishnan.jpg" }
+      ]
+    },
+    {
+      id: "movie-3",
+      title: "FadeOut",
+      meta: "2026 • Suspense/Thriller • Short Film",
+      poster: "fadeout.jpg", 
+      isUpcoming: false,
+      youtube: "https://www.youtube.com",
+      overview: "Random people trapped inside a random hall and their attempts to escape.",
+      ratings: [
+        { source: "IMDb", score: "7.8/10" },
+        { source: "Rotten Tomatoes", score: "90%" },
+        { source: "Letterboxd", score: "3.9/5" }
+      ],
+      cast: [
+        { char: "Random Person 1", actor: "Joshwa Jose", pic: "joshwa.jpg" },
+        { char: "Random Person 2", actor: "Harikrishnan P S", pic: "harikrishnan.jpg" },
+        { char: "Random Person 3", actor: "Rahul", pic: "rahul.jpg" },
+        { char: "Random Person 4", actor: "Jerry", pic: "jerry.jpg" }
+      ]
+    },
+    {
+      id: "movie-4",
+      title: "നിഴൽ (Nizhal)",
+      meta: "Upcoming Project • Production Phase",
+      poster: "nizhal.jpg", 
+      isUpcoming: true,
+      youtube: "#",
+      overview: "An upcoming marquee project under Thursday Industries Inc. Production lines are currently underway. Stay tuned for casting updates.",
+      ratings: [
+        { source: "Status", score: "In Production" },
+        { source: "Release", score: "Coming Soon" }
+      ],
+      cast: [
+        { char: "To Be Announced", actor: "Thursday Ensemble", pic: "placeholder.jpg" }
+      ]
+    }
+  ];
+
+  const root = document.getElementById('engine-root');
+
+  // Generate layouts mapping database to UI DOM
+  movieDatabase.forEach(movie => {
+    const card = document.createElement('section');
+    card.className = 'movie-engine-card';
+    card.id = movie.id;
+
+    // Build cast list items safely
+    let castHTML = `<div class="cast-list">`;
+    movie.cast.forEach(c => {
+      castHTML += `
+        <div class="cast-card">
+          <div class="cast-photo-frame">
+            <img src="${c.pic}" alt="${c.actor}" onerror="this.style.display='none'">
+          </div>
+          <span class="cast-char">${c.char}</span>
+          <span class="cast-actor">${c.actor}</span>
+        </div>
+      `;
+    });
+    castHTML += `</div>`;
+
+    // Build rating records elements loop
+    let ratingsHTML = '';
+    movie.ratings.forEach(r => {
+      ratingsHTML += `
+        <div class="rating-row">
+          <span class="rating-source">${r.source}</span>
+          <span class="rating-score">${r.score}</span>
+        </div>
+      `;
+    });
+
+    // Outer structural framework configuration 
+    card.innerHTML = `
+      <div class="g-header">
+        <div class="g-title-area">
+          <h2>${movie.title}</h2>
+          <div class="g-meta">${movie.meta}</div>
+        </div>
+      </div>
+
+      <div class="g-tabs">
+        <button class="g-tab-btn active" onclick="switchTab('${movie.id}', 'overview')">Overview</button>
+        <button class="g-tab-btn" onclick="switchTab('${movie.id}', 'cast')">Cast</button>
+        <button class="g-tab-btn" onclick="switchTab('${movie.id}', 'watch')">Watch Movie</button>
+      </div>
+
+      <div class="g-grid">
+        <div class="g-panel-display">
+          
+          <!-- Overview Pane -->
+          <div class="g-view active" data-pane="overview">
+            <p class="overview-text">${movie.overview}</p>
+          </div>
+
+          <!-- Cast Pane -->
+          <div class="g-view" data-pane="cast">
+            ${castHTML}
+          </div>
+
+          <!-- Watch Movie Pane -->
+          <div class="g-view" data-pane="watch">
+            <div class="watch-panel">
+              ${movie.isUpcoming ? `
+                <p class="overview-text">This film is currently in production. Trailer and feature platform locations will unlock upon general release dates.</p>
+              ` : `
+                <a href="${movie.youtube}" target="_blank" rel="noopener" class="yt-link-btn">
+                  <svg viewBox="0 0 24 24"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93 puddings.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg>
+                  Watch Movie on YouTube
+                </a>
+              `}
+            </div>
+          </div>
+
+        </div>
+
+        <!-- Right Side Panel Infobox Graphic Elements -->
+        <div class="g-meta-box">
+          <div class="poster-frame">
+            ${movie.isUpcoming ? `<span class="upcoming-ribbon">Upcoming</span>` : ''}
+            <img src="${movie.poster}" alt="${movie.title} Poster Graphic" onerror="this.style.opacity='0.2'">
+          </div>
+          
+          <div class="rating-box">
+            <h4>User Metrics & Ratings</h4>
+            ${ratingsHTML}
+          </div>
+        </div>
+      </div>
+    `;
+
+    root.appendChild(card);
+  });
+
+  // Pure state switcher engine tab system logic
+  function switchTab(cardId, targetPane) {
+    const cardEl = document.getElementById(cardId);
+    if (!cardEl) return;
+
+    // Update active tab button style rule 
+    const buttons = cardEl.querySelectorAll('.g-tab-btn');
+    buttons.forEach(btn => {
+      if(btn.textContent.toLowerCase().includes(targetPane === 'watch' ? 'watch' : targetPane)) {
+        btn.classList.add('active');
+      } else {
+        btn.classList.remove('active');
+      }
+    });
+
+    // Pivot dynamic panel window configurations
+    const views = cardEl.querySelectorAll('.g-view');
+    views.forEach(view => {
+      if (view.dataset.pane === targetPane) {
+        view.classList.add('active');
+      } else {
+        view.classList.remove('active');
+      }
+    });
+  }
+</script>
+
+</body>
+</html>
