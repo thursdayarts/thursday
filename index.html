@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -370,7 +371,7 @@
     display:flex;
     gap:10px;
   }
-  .watch-btn{
+  .more-link-btn {
     flex:1;
     font-family:var(--heading);
     font-size:0.78rem;
@@ -384,59 +385,10 @@
     cursor:pointer;
     transition:background 0.2s ease, border-color 0.2s ease;
     display:flex;align-items:center;justify-content:center;gap:8px;
+    text-align: center;
   }
-  .watch-btn:hover{background:var(--crimson);border-color:var(--crimson);}
-  .watch-btn svg{width:13px;height:13px;fill:currentColor;transition:transform 0.2s ease;}
-  .watch-btn.is-open svg{transform:rotate(180deg);}
-
-  /* ---------- embedded player ---------- */
-  .player-wrap{
-    overflow:hidden;
-    max-height:0;
-    transition:max-height 0.35s ease;
-  }
-  .player-wrap.open{max-height:400px;}
-  .player{
-    position:relative;
-    aspect-ratio:16/9;
-    margin:0 22px 22px;
-    border-radius:4px;
-    overflow:hidden;
-    background:#000;
-    border:1px solid var(--line);
-  }
-  .player .player-art{
-    position:absolute;inset:0;
-    background:linear-gradient(160deg, #1a1a22, #0c0c10 70%);
-    display:flex;align-items:center;justify-content:center;
-    flex-direction:column;
-    gap:10px;
-  }
-  .player .progress-track{
-    position:absolute;bottom:0;left:0;right:0;height:3px;
-    background:rgba(255,255,255,0.12);
-  }
-  .player .progress-fill{
-    height:100%;
-    width:0%;
-    background:var(--crimson-bright);
-    transition:width 0.2s linear;
-  }
-  .player .center-btn{
-    width:52px;height:52px;border-radius:50%;
-    background:rgba(214,51,76,0.9);
-    border:none;
-    display:flex;align-items:center;justify-content:center;
-    cursor:pointer;
-  }
-  .player .center-btn svg{width:16px;height:16px;fill:#fff;}
-  .player .now-label{
-    font-family:var(--heading);
-    font-size:0.7rem;
-    letter-spacing:1.5px;
-    text-transform:uppercase;
-    color:var(--text-faint);
-  }
+  .more-link-btn:hover{background:var(--crimson);border-color:var(--crimson);color: #fff;}
+  .more-link-btn svg{width:13px;height:13px;fill:currentColor;}
 
   /* ---------- footer ---------- */
   footer{
@@ -504,8 +456,7 @@
       </div>
 
       <div class="grid" id="movie-grid">
-        <!-- Cards injected by JS -->
-      </div>
+        </div>
     </div>
   </section>
 </main>
@@ -516,56 +467,48 @@
 </footer>
 
 <script>
-  // 1. Added 'img' property to each object with placeholder URLs. 
-  // Replace these URLs with your actual image paths (e.g., "images/movies.jpg")
   const movies = [
     {
       title: "Thursday Movies",
       date: "Sept 8, 2019",
       badge: "shortfilms",
       desc: "Short films mostly for now",
-      img: "https://scontent.cdninstagram.com/v/t51.2885-19/343292254_964759684529435_3779189888651118312_n.jpg?_nc_cat=106&ccb=7-5&_nc_sid=bf7eb4&efg=eyJ2ZW5jb2RlX3RhZyI6InByb2ZpbGVfcGljLnd3dy43ODIuQzMifQ%3D%3D&_nc_ohc=KCaupcJgPCoQ7kNvwFU1Gvi&_nc_oc=AdoVKwqR1w1RjmPBh2txWuIhaDbuEy4Qm8MomXfgYKJcd5NfC26oJlBwmwtFEvwAH40&_nc_zt=24&_nc_ht=scontent.cdninstagram.com&_nc_ss=7baaf&oh=00_Af_-FDceBoMhwxm9pF7D8w0mzgIt3gtrsV7eVqih49PlSw&oe=6A3B0904"
+      img: "https://scontent.cdninstagram.com/v/t51.2885-19/343292254_964759684529435_3779189888651118312_n.jpg?_nc_cat=106&ccb=7-5&_nc_sid=bf7eb4&efg=eyJ2ZW5jb2RlX3RhZyI6InByb2ZpbGVfcGljLnd3dy43ODIuQzMifQ%3D%3D&_nc_ohc=KCaupcJgPCoQ7kNvwFU1Gvi&_nc_oc=AdoVKwqR1w1RjmPBh2txWuIhaDbuEy4Qm8MomXfgYKJcd5NfC26oJlBwmwtFEvwAH40&_nc_zt=24&_nc_ht=scontent.cdninstagram.com&_nc_ss=7baaf&oh=00_Af_-FDceBoMhwxm9pF7D8w0mzgIt3gtrsV7eVqih49PlSw&oe=6A3B0904",
+      link: "movies.html"
     },
     {
       title: "Thursday Games",
       date: "Apr 30, 2022",
       badge: "Games",
       desc: "2D Games so far..",
-      img: "https://scontent.cdninstagram.com/v/t51.82787-19/721042014_18107893744785498_5134217053089170425_n.jpg?_nc_cat=107&ccb=7-5&_nc_sid=bf7eb4&efg=eyJ2ZW5jb2RlX3RhZyI6InByb2ZpbGVfcGljLnd3dy4xMDgwLkMzIn0%3D&_nc_ohc=1i47F-w4-msQ7kNvwFzbR_B&_nc_oc=Adrt8TiTWQOPkAGjZgBafRVp-d9ZU0ox6DIKhe3Z3UuXVU6Z3PqDYXHiQ8zloWugkqg&_nc_zt=24&_nc_ht=scontent.cdninstagram.com&_nc_gid=JVfYpVX_pzsLamWpIG_j6w&_nc_ss=7baaf&oh=00_Af8EROVtlTVmaWGMFQjKy14C5y5wJT_I4A4vd_V9nGqpEg&oe=6A3AF912"
+      img: "https://scontent.cdninstagram.com/v/t51.82787-19/721042014_18107893744785498_5134217053089170425_n.jpg?_nc_cat=107&ccb=7-5&_nc_sid=bf7eb4&efg=eyJ2ZW5jb2RlX3RhZyI6InByb2ZpbGVfcGlj.nd3dy4xMDgwLkMzIn0%3D&_nc_ohc=1i47F-w4-msQ7kNvwFzbR_B&_nc_oc=Adrt8TiTWQOPkAGjZgBafRVp-d9ZU0ox6DIKhe3Z3UuXVU6Z3PqDYXHiQ8zloWugkqg&_nc_zt=24&_nc_ht=scontent.cdninstagram.com&_nc_gid=JVfYpVX_pzsLamWpIG_j6w&_nc_ss=7baaf&oh=00_Af8EROVtlTVmaWGMFQjKy14C5y5wJT_I4A4vd_V9nGqpEg&oe=6A3AF912",
+      link: "games.html"
     },
     {
-      title: "Thursday Narrations",
+      title: "Thursday Books",
       date: "Jan 11, 2026",
       badge: "Books",
       desc: "Active Development",
-      img: "https://scontent.cdninstagram.com/v/t51.82787-19/721463154_18128113717528850_123190546736171627_n.jpg?_nc_cat=111&ccb=7-5&_nc_sid=bf7eb4&efg=eyJ2ZW5jb2RlX3RhZyI6InByb2ZpbGVfcGljLnd3dy4xMDI0LkMzIn0%3D&_nc_ohc=cSlKDPO_fEAQ7kNvwGR5Hhk&_nc_oc=Adolos-IxaviRuP9y90Dy9Eo4DUB5XpF3cVU03LWsvSawn9HjWjDfXk8K-fPP5TY52w&_nc_zt=24&_nc_ht=scontent.cdninstagram.com&_nc_gid=1hIr68dL7CWUfRo9Woc5jw&_nc_ss=7baaf&oh=00_Af_EOd7smNBNJEg47eXuHin5mnm8cUbKK2i-YaKdar6nsA&oe=6A3ADC6A"
+      img: "https://scontent.cdninstagram.com/v/t51.82787-19/721463154_18128113717528850_123190546736171627_n.jpg?_nc_cat=111&ccb=7-5&_nc_sid=bf7eb4&efg=eyJ2ZW5jb2RlX3RhZyI6InByb2ZpbGVfcGljLnd3dy4xMDI4LkMzIn0%3D&_nc_ohc=cSlKDPO_fEAQ7kNvwGR5Hhk&_nc_oc=Adolos-IxaviRuP9y90Dy9Eo4DUB5XpF3cVU03LWsvSawn9HjWjDfXk8K-fPP5TY52w&_nc_zt=24&_nc_ht=scontent.cdninstagram.com&_nc_gid=1hIr68dL7CWUfRo9Woc5jw&_nc_ss=7baaf&oh=00_Af_EOd7smNBNJEg47eXuHin5mnm8cUbKK2i-YaKdar6nsA&oe=6A3ADC6A",
+      link: "books.html"
     }
   ];
 
   const grid = document.getElementById('movie-grid');
 
-  function playIconSVG(){
-    return '<svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>';
-  }
-  function chevronSVG(){
-    return '<svg viewBox="0 0 24 24"><path d="M7 10l5 5 5-5z"/></svg>';
+  function arrowRightSVG(){
+    return '<svg viewBox="0 0 24 24"><path d="M5 13h11.86l-5.43 5.43 1.42 1.42L21.14 12l-8.29-8.29-1.42 1.42 5.43 5.43H5v2z"/></svg>';
   }
 
-  movies.forEach((m, i) => {
+  movies.forEach((m) => {
     const card = document.createElement('article');
     card.className = 'card';
     card.innerHTML = `
       <div class="thumb">
-        <!-- 2. The new image element added inside the thumb box -->
         <img src="${m.img}" alt="${m.title}" style="width: 100%; height: 100%; object-fit: cover; position: absolute; inset: 0; z-index: 0;">
-        
-        <!-- UI elements remain layered over the image -->
         <span class="sprocket top" aria-hidden="true" style="z-index: 1;"></span>
         <span class="sprocket bottom" aria-hidden="true" style="z-index: 1;"></span>
         <span class="badge" style="z-index: 1;">${m.badge}</span>
-        <div class="play-overlay" style="z-index: 1;">
-          <div class="play-circle">${playIconSVG()}</div>
-        </div>
       </div>
       <div class="card-body">
         <div class="card-title-row">
@@ -574,67 +517,17 @@
         <span class="card-date">${m.date}</span>
         <p class="card-desc">${m.desc}</p>
         <div class="card-actions">
-          <button class="watch-btn" data-index="${i}">
-            <span class="btn-label">Watch Trailer</span>
-            ${chevronSVG()}
-          </button>
-        </div>
-      </div>
-      <div class="player-wrap" data-player="${i}">
-        <div class="player">
-          <div class="player-art">
-            <button class="center-btn" data-toggle-play="${i}">${playIconSVG()}</button>
-            <span class="now-label">Trailer not loaded</span>
-          </div>
-          <div class="progress-track"><div class="progress-fill" data-fill="${i}"></div></div>
+          <a href="${m.link}" class="more-link-btn">
+            <span>More</span>
+            ${arrowRightSVG()}
+          </a>
         </div>
       </div>
     `;
     grid.appendChild(card);
   });
-
-  // Toggle player open/close
-  grid.addEventListener('click', (e) => {
-    const watchBtn = e.target.closest('.watch-btn');
-    if (watchBtn) {
-      const idx = watchBtn.dataset.index;
-      const wrap = grid.querySelector(`.player-wrap[data-player="${idx}"]`);
-      const isOpen = wrap.classList.toggle('open');
-      watchBtn.classList.toggle('is-open', isOpen);
-      watchBtn.querySelector('.btn-label').textContent = isOpen ? 'Hide Trailer' : 'Watch Trailer';
-      return;
-    }
-
-    const playBtn = e.target.closest('[data-toggle-play]');
-    if (playBtn) {
-      const idx = playBtn.dataset.togglePlay;
-      const label = playBtn.parentElement.querySelector('.now-label');
-      const fill = grid.querySelector(`[data-fill="${idx}"]`);
-      const isPlaying = playBtn.classList.toggle('playing');
-
-      if (isPlaying) {
-        label.textContent = 'Now Playing — Trailer';
-        playBtn.innerHTML = '<svg viewBox="0 0 24 24"><path d="M6 5h4v14H6zM14 5h4v14h-4z"/></svg>';
-        let progress = 0;
-        playBtn._interval = setInterval(() => {
-          progress += 1.2;
-          if (progress >= 100) {
-            progress = 100;
-            clearInterval(playBtn._interval);
-            label.textContent = 'Trailer ended';
-            playBtn.classList.remove('playing');
-            playBtn.innerHTML = '<svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>';
-          }
-          fill.style.width = progress + '%';
-        }, 120);
-      } else {
-        clearInterval(playBtn._interval);
-        label.textContent = 'Paused';
-        playBtn.innerHTML = '<svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>';
-      }
-    }
-  });
 </script>
 
 </body>
 </html>
+
