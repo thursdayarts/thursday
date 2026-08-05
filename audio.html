@@ -298,17 +298,16 @@
       meta: "2026 • Sci-fi • AudioBook",
       poster: "eyedrop.png", // Set system image filename here
       isUpcoming: false,
-      youtube: "https://youtube.com/playlist?list=PLEZr4-q4pevg&si=RlNvljdOpyA_3l3Shttps://youtube.com/playlist?list=PLEZr4-q4pevg&si=RlNvljdOpyA_3l3S", // Set link to YouTube target
+      youtube: "https://youtube.com/playlist?list=PLEZr4-q4pevg&si=RlNvljdOpyA_3l3S", // Fixed duplicate URL syntax error
       overview: "Mystery thriller",
       ratings: [
         { source: "Youtube Views: ", score: "counting+" }
       ],
-      Characters: [
-        { char: "Alex Donovan" }, // Set cast picture path here
-        { char: "Mary Richards" },
-        { char: "Davy O'Malley" },
-        { char: "Depty Arthur Smith}
-        
+      cast: [ // Fixed property name from Characters to cast to match loop below
+        { char: "Alex Donovan", pic: "", actor: "" }, 
+        { char: "Mary Richards", pic: "", actor: "" },
+        { char: "Davy O'Malley", pic: "", actor: "" },
+        { char: "Depty Arthur Smith", pic: "", actor: "" } // Fixed missing closing quote
       ]
     }
   ];
@@ -382,7 +381,7 @@
                 <p class="overview-text">This film is currently in production. Trailer and feature platform locations will unlock upon general release dates.</p>
               ` : `
                 <a href="${movie.youtube}" target="_blank" rel="noopener" class="yt-link-btn">
-                  <svg viewBox="0 0 24 24"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93 puddings.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg>
+                  <svg viewBox="0 0 24 24"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93 .502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg>
                   Watch Movie on YouTube
                 </a>
               `}
