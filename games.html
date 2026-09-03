@@ -271,15 +271,20 @@
       tagline: "2D shooter",
       platform: "WINDOWS",
       poster: "swww.jpg", 
-      upiQrImage: "gpay.png", // Your uploaded Google Pay QR screenshot path
+      upiQrImage: "gpay.png",
       downloadLink: "SW.exe" 
     },
-    id:"game-2",
-    title:"Spiritual Warfare II",
-    tagline: "2D semi open world",
-    platform:"WINDOWS",
-    poster:"SWII.png",
-    downloadLink:"SWII.exe"
+    {
+      id: "game-2",
+      title: "Spiritual Warfare II",
+      tagline: "2D semi open world",
+      platform: "WINDOWS",
+      poster: "SWII.png",
+      upiQrImage: "gpay.png",
+      // Replace with your actual GitHub release file download link once published:
+      // e.g., "https://github.com/thursdayarts/thursday/releases/download/v1.0.0/SWII.exe"
+      downloadLink: "https://github.com/thursdayarts/thursday/releases/download/v1.0.0/SWII.exe"
+    }
   ];
 
   const gridRoot = document.getElementById('featured-grid');
@@ -340,11 +345,11 @@
     // Hide the QR block element matrix 
     document.getElementById('qr-modal-window').classList.remove('active');
     
-    // Swap original pay button out for secure live PDF download anchor layout
+    // Dynamically display correct game download button title matching selected game
     const ctaWrapper = document.getElementById('cta-state-wrapper');
     ctaWrapper.innerHTML = `
       <p style="color: var(--accent-green); font-weight:600; margin-bottom:10px; font-size:1.1rem;">✓ Payment Confirmed Successfully!</p>
-      <a href="${selectedGame.downloadLink}" download class="action-btn download-ready-btn">DOWNLOAD Spiritual Warfare 1</a>
+      <a href="${selectedGame.downloadLink}" download class="action-btn download-ready-btn">DOWNLOAD ${selectedGame.title}</a>
     `;
   }
 
