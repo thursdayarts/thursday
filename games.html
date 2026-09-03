@@ -281,8 +281,6 @@
       platform: "WINDOWS",
       poster: "SWII.png",
       upiQrImage: "gpay.png",
-      // Replace with your actual GitHub release file download link once published:
-      // e.g., "https://github.com/thursdayarts/thursday/releases/download/v1.0.0/SWII.exe"
       downloadLink: "https://github.com/thursdayarts/thursday/releases/download/v1.0.0/SWII.exe"
     }
   ];
@@ -342,14 +340,12 @@
     const selectedGame = gameDatabase.find(g => g.id === gameId);
     if (!selectedGame) return;
     
-    // Hide the QR block element matrix 
     document.getElementById('qr-modal-window').classList.remove('active');
     
-    // Dynamically display correct game download button title matching selected game
     const ctaWrapper = document.getElementById('cta-state-wrapper');
     ctaWrapper.innerHTML = `
       <p style="color: var(--accent-green); font-weight:600; margin-bottom:10px; font-size:1.1rem;">✓ Payment Confirmed Successfully!</p>
-      <a href="${selectedGame.downloadLink}" download class="action-btn download-ready-btn">DOWNLOAD ${selectedGame.title}</a>
+      <a href="${selectedGame.downloadLink}" target="_blank" rel="noopener noreferrer" class="action-btn download-ready-btn">DOWNLOAD ${selectedGame.title}</a>
     `;
   }
 
